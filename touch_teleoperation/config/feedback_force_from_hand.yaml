@@ -1,0 +1,3 @@
+feedback_force_from_hand:
+  # Name of the feedback force topic.
+  feedback_force_topic: /touch/master_touch/tip_force # default: /touch/master_touch/tip_force

@@ -1,0 +1,7 @@
+master_slave_force_mapping:
+  # Name of force frame id for master robot.
+  master_force_frame_id: touch_tip # default: touch_tip
+  # Feedback force mapping coordinate order of slave robot relative to master robot([x,y,z,rx,ry,rz]).
+  force_mapping_order: "['y', 'z', 'x', 'rx', 'ry', 'rz']" # default: "['x', 'y', 'z', 'rx', 'ry', 'rz']"
+  # Absolute force scale of slave robot relative to master robot([x,y,z,rx,ry,rz]).
+  absolute_force_scale: "[0.05, 0.05, 0.05, 1, 1, 1]" # default: "[1, 1, 1, 1, 1, 1]"

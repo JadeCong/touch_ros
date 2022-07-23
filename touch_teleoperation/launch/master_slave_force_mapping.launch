@@ -1,0 +1,9 @@
+<launch>
+    
+    <!-- Run master_slave_force_mapping node -->
+    <rosparam command="load" file="$(find touch_teleoperation)/config/master_slave_force_mapping.yaml" />
+    <node name="master_slave_force_mapping" pkg="touch_teleoperation" type="master_slave_force_mapping.py" output="screen" respawn="false">
+        <remap from="/touch/master_touch/feedback_force" to="/touch/master_touch/tip_force" />
+    </node>
+    
+</launch>

@@ -1,0 +1,24 @@
+<launch>
+    
+    <!-- Parameters configuration -->
+    <arg name="force_mapping" default="true" doc="Mapping the coordinate system of feedback force from hand." />
+    
+    <group ns="touch">
+        <!-- Load robot_description -->
+        <param name="robot_description" command="$(find xacro)/xacro '$(find touch_description)/urdf/touch.urdf'" />
+        
+        <!-- Run rviz and update robot states -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find touch_teleoperation)/config/touch_teleoperation.rviz" required="true" />
+        
+        <!-- Run master_slave_force_mapping node -->
+        <include file="$(find touch_teleoperation)/launch/master_slave_force_mapping.launch" if="$(arg force_mapping)" />
+        
+        <!-- Run feedback_force_from_hand node -->
+        <rosparam command="load" file="$(find touch_teleoperation)/config/feedback_force_from_hand.yaml" />
+        <node name="feedback_force_from_hand" pkg="touch_teleoperation" type="feedback_force_from_hand" output="screen" respawn="false">
+            <remap from="/touch/master_touch/joint_states" to="/touch/joint_states" />
+        </node>
+    </group>
+    
+</launch>

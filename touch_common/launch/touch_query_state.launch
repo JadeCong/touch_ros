@@ -1,0 +1,15 @@
+<launch>
+    
+    <!-- Load robot_description -->
+    <param name="robot_description" command="$(find xacro)/xacro '$(find touch_description)/urdf/touch.urdf'" />
+    
+    <!-- Run rviz and update robot states -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find touch_description)/config/touch.rviz" required="true" />
+    
+    <!-- Run touch_query_state node -->
+    <node name="touch_query_state" pkg="touch_common" type="touch_query_state" output="screen" respawn="false">
+        <remap from="/touch/joint_states" to="/joint_states" />
+    </node>
+    
+</launch>

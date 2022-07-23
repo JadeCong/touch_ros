@@ -1,0 +1,40 @@
+master_touch:
+  # Name of master feedback force topic.
+  master_feedback_force_topic: /touch/master_touch/tip_force # default: /touch/master_touch/tip_force
+  
+  # Name of touch cartesian state frame.
+  frame_cartesian_state: touch_tip # default: touch_tip
+  # Name of touch cartesian absolute command frame.
+  frame_cartesian_absolute_command: touch_tip # default: touch_tip
+  # Name of touch cartesian incremental command frame.
+  frame_cartesian_incremental_command: touch_tip # default: touch_tip
+  
+  # Name of franka gripper homing action server.
+  gripper_homing_action_server: /franka/franka_gripper/homing # default: /franka/franka_gripper/homing
+  # Name of franka gripper move action server.
+  gripper_move_action_server: /franka/franka_gripper/move # default: /franka/franka_gripper/move
+  # Name of franka gripper stop action server.
+  gripper_stop_action_server: /franka/franka_gripper/stop # default: /franka/franka_gripper/stop
+  # Name of franka gripper grasp action server.
+  gripper_grasp_action_server: /franka/franka_gripper/grasp # default: /franka/franka_gripper/grasp
+  # Name of franka gripper command action server.
+  gripper_command_action_server: /franka/franka_gripper/gripper_action # default: /franka/franka_gripper/gripper_action
+  
+  # Franka gripper homing goal from touch.
+  touch_homing_goal: '{}' # default: Null
+  # Franka gripper open goal from touch.
+  touch_open_goal:
+    width: 0.08 # default: 0.08 m
+    speed: 0.05 # default: 0.05 m/s
+  # Franka gripper close goal from touch.
+  touch_close_goal:
+    width: 0.005 # default: 0.002 m
+    speed: 0.05 # default: 0.05 m/s
+  # Franka gripper grasp goal from touch.
+  touch_grasp_goal:
+    width: 0.005 # default: 0.005 m
+    epsilon:
+      inner: 0.005 # default: 0.005 m
+      outer: 0.005 # default: 0.005 m
+    speed: 0.05 # default: 0.05 m/s
+    force: 5.0 # default: 5.0 N

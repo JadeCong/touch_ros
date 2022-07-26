@@ -790,7 +790,7 @@ void ResetSlaveRobot(void)
     
     /* Send the reset flag to slave robot. */
     gROSConfig.gripper_homing_action_client->sendGoal(gROSConfig.touch_homing_goal);
-    for (int i = 0; i < 10; i++)  // publish reset flag for 10 times so that slave robot could receive the flag.
+    for (int i = 0; i < 5; i++)  // publish reset flag for 5 times so that slave robot could receive the flag.
     {
         gROSConfig.pub_cartesian_incremental_command.publish(gROSConfig.cartesian_incremental_command);
     }
@@ -798,7 +798,7 @@ void ResetSlaveRobot(void)
     
     /* Wait 5 seconds for reseting slave robot and recover to command mode. */
     sleep(5);  // 5 seconds are enough for reseting slave robot.
-    printf("Reset slave robot done and recovering to command mode...\n");
+    printf("Reset slave robot done and recovering to command mode...\n\n");
 }
 
 /********************************************

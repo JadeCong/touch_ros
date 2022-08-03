@@ -37,4 +37,4 @@ master_touch:
       inner: 0.005 # default: 0.005 m
       outer: 0.005 # default: 0.005 m
     speed: 0.05 # default: 0.05 m/s
-    force: 5.0 # default: 5.0 N
+    force: 1.0 # default: 5.0 N

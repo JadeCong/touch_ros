@@ -13,9 +13,10 @@ def master_slave_force_mapping_node():
     rospy.init_node("master_slave_force_mapping", anonymous=True)
     
     # get ros parameters from parameter server
+    slave_force_topic = rospy.get_param("/touch/master_slave_force_mapping/slave_force_topic")
     master_force_frame_id = rospy.get_param("/touch/master_slave_force_mapping/master_force_frame_id")
-    force_mapping_order = eval(rospy.get_param("/touch/master_slave_force_mapping/force_mapping_order"))
-    absolute_force_scale = eval(rospy.get_param("/touch/master_slave_force_mapping/absolute_force_scale"))
+    force_mapping_order = rospy.get_param("/touch/master_slave_force_mapping/force_mapping_order")
+    absolute_force_scale = rospy.get_param("/touch/master_slave_force_mapping/absolute_force_scale")
     
     # set the feedback_force_index and feedback_force_scale
     master_robot_coordinate_index = ['x','y','z','rx','ry','rz']
@@ -33,7 +34,7 @@ def master_slave_force_mapping_node():
     feedback_force = WrenchStamped()
     
     # define the subscriber for getting feedback force from slave hand
-    sub_feedback_force = rospy.Subscriber("/hand/slave_hand/feedback_force", WrenchStamped, 
+    sub_feedback_force = rospy.Subscriber(slave_force_topic, WrenchStamped, 
                                           callback=force_mapping_callback, 
                                           callback_args=[pub_feedback_force, feedback_force, master_force_frame_id, feedback_force_index, feedback_force_scale], 
                                           queue_size=1)

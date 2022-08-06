@@ -32,7 +32,7 @@ master_touch:
     speed: 0.05 # default: 0.05 m/s
   # Franka gripper grasp goal from touch.
   touch_grasp_goal:
-    width: 0.005 # default: 0.005 m
+    width: 0.01 # default: 0.005 m
     epsilon:
       inner: 0.005 # default: 0.005 m
       outer: 0.005 # default: 0.005 m

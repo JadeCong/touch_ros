@@ -796,8 +796,8 @@ void ResetSlaveRobot(void)
     }
     printf("Resetting slave robot(Franka Panda/Gripper) and do not do any operation...\n\n");
     
-    /* Wait 5 seconds for reseting slave robot and recover to command mode. */
-    sleep(5);  // 5 seconds are enough for reseting slave robot.
+    /* Wait 10 seconds for reseting slave robot and recover to command mode. */
+    sleep(10);  // 10 seconds are enough for reseting slave robot.
     printf("Reset slave robot done and recovering to command mode...\n\n");
 }
 

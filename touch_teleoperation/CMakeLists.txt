@@ -8,6 +8,9 @@ project(touch_teleoperation)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+    dynamic_reconfigure
+    roscpp
+    rospy
     std_msgs
     geometry_msgs
     actionlib_msgs
@@ -25,7 +28,7 @@ find_package(Boost REQUIRED COMPONENTS system)
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
+catkin_python_setup()
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -97,6 +100,9 @@ find_package(Boost REQUIRED COMPONENTS system)
 #   cfg/DynReconf1.cfg
 #   cfg/DynReconf2.cfg
 # )
+generate_dynamic_reconfigure_options(
+    cfg/force_scale_param.cfg
+)
 
 ###################################
 ## catkin specific configuration ##
@@ -110,16 +116,20 @@ find_package(Boost REQUIRED COMPONENTS system)
 catkin_package(
     INCLUDE_DIRS include
     LIBRARIES franka_gripper
-    CATKIN_DEPENDS touch_description 
-                    touch_msgs 
-                    std_msgs 
-                    actionlib_msgs 
-                    control_msgs 
-                    geometry_msgs 
-                    sensor_msgs 
-                    robot_state_publisher 
-                    tf 
-                    xacro
+    CATKIN_DEPENDS
+        dynamic_reconfigure
+        roscpp
+        rospy
+        touch_description 
+        touch_msgs 
+        std_msgs 
+        actionlib_msgs 
+        control_msgs 
+        geometry_msgs 
+        sensor_msgs 
+        robot_state_publisher 
+        tf 
+        xacro
 #  DEPENDS system_lib
 )
 
@@ -192,6 +202,10 @@ target_link_libraries(master_touch HD HDU rt ncurses stdc++ m PhantomIOLib42 con
 #   scripts/my_python_script
 #   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
+install(
+    PROGRAMS srcipts/master_slave_force_mapping.py
+    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
@@ -213,6 +227,10 @@ target_link_libraries(master_touch HD HDU rt ncurses stdc++ m PhantomIOLib42 con
 #   FILES_MATCHING PATTERN "*.h"
 #   PATTERN ".svn" EXCLUDE
 # )
+install(
+    DIRECTORY cfg
+    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES

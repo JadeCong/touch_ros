@@ -11,6 +11,9 @@
         <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
         <node name="rviz" pkg="rviz" type="rviz" args="-d $(find touch_teleoperation)/config/touch_teleoperation.rviz" required="true" />
         
+        <!-- Run rqt_reconfigure for force mapping parameters -->
+        <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" required="false" />
+        
         <!-- Run master_slave_force_mapping node -->
         <include file="$(find touch_teleoperation)/launch/master_slave_force_mapping.launch" if="$(arg force_mapping)" />
         

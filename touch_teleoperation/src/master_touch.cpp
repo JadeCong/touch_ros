@@ -27,6 +27,8 @@
 #include <HDU/hduMatrix.h>
 
 #include <ros/ros.h>
+#include <dynamic_reconfigure/server.h>
+#include <touch_teleoperation/franka_gripper_goal_paramConfig.h>
 #include <std_msgs/String.h>
 #include <std_msgs/Float64.h>
 #include <sensor_msgs/JointState.h>
@@ -245,6 +247,25 @@ HDSchedulerHandle gQueryDeviceStateSchedulerHandle = HD_INVALID_HANDLE;
 /*********************************************************************************************
     ROS callback for synchronously getting the feedback force form slave robot.
 *********************************************************************************************/
+void FrankaGripperGoalParamCallback(touch_teleoperation::franka_gripper_goal_paramConfig &config, uint32_t level)
+{
+    /* Franka gripper OpenGoal from touch. */
+    gROSConfig.touch_open_goal.width = config.open_width;
+    gROSConfig.touch_open_goal.speed = config.open_speed;
+    /* Franka gripper CloseGoal from touch. */
+    gROSConfig.touch_close_goal.width = config.close_width;
+    gROSConfig.touch_close_goal.speed = config.close_speed;
+    /* Franka gripper GraspGoal from touch. */
+    gROSConfig.touch_grasp_goal.width = config.grasp_width;
+    gROSConfig.touch_grasp_goal.epsilon.inner = config.grasp_epsilon_inner;
+    gROSConfig.touch_grasp_goal.epsilon.outer = config.grasp_epsilon_outer;
+    gROSConfig.touch_grasp_goal.speed = config.grasp_speed;
+    gROSConfig.touch_grasp_goal.force = config.grasp_force;
+}
+
+/*********************************************************************************************
+    ROS callback for synchronously getting the feedback force form slave robot.
+*********************************************************************************************/
 void GetFeedbackForceCallback(const geometry_msgs::WrenchStamped::ConstPtr& msg)
 {
     /* Feedback force from slave robot. */
@@ -267,28 +288,35 @@ void ConfigureROS(int argc, char* argv[])
     ros::init(argc, argv, "master_touch", ros::init_options::AnonymousName);
     ros::NodeHandle nh;
     
+    /* Set the dynamic reconfigure server for franka gripper goal parameters. */
+    dynamic_reconfigure::Server<touch_teleoperation::franka_gripper_goal_paramConfig> dynamic_reconfigure_server;
+    dynamic_reconfigure::Server<touch_teleoperation::franka_gripper_goal_paramConfig>::CallbackType f;
+    f = boost::bind(&FrankaGripperGoalParamCallback, _1, _2);
+    dynamic_reconfigure_server.setCallback(f);
+    
     /* Get the parameters form ros parameter server. */
-    nh.getParam("/touch/master_touch/master_feedback_force_topic", gROSConfig.master_feedback_force_topic);
+    ros::NodeHandle private_nh("~");
+    private_nh.getParam("/touch/master_touch/master_feedback_force_topic", gROSConfig.master_feedback_force_topic);
     
-    nh.getParam("/touch/master_touch/frame_cartesian_state", gROSConfig.frame_cartesian_state);
-    nh.getParam("/touch/master_touch/frame_cartesian_absolute_command", gROSConfig.frame_cartesian_absolute_command);
-    nh.getParam("/touch/master_touch/frame_cartesian_incremental_command", gROSConfig.frame_cartesian_incremental_command);
+    private_nh.getParam("/touch/master_touch/frame_cartesian_state", gROSConfig.frame_cartesian_state);
+    private_nh.getParam("/touch/master_touch/frame_cartesian_absolute_command", gROSConfig.frame_cartesian_absolute_command);
+    private_nh.getParam("/touch/master_touch/frame_cartesian_incremental_command", gROSConfig.frame_cartesian_incremental_command);
     
-    nh.getParam("/touch/master_touch/gripper_homing_action_server", gROSConfig.gripper_homing_action_server);
-    nh.getParam("/touch/master_touch/gripper_move_action_server", gROSConfig.gripper_move_action_server);
-    nh.getParam("/touch/master_touch/gripper_stop_action_server", gROSConfig.gripper_stop_action_server);
-    nh.getParam("/touch/master_touch/gripper_grasp_action_server", gROSConfig.gripper_grasp_action_server);
-    nh.getParam("/touch/master_touch/gripper_command_action_server", gROSConfig.gripper_command_action_server);
+    private_nh.getParam("/touch/master_touch/gripper_homing_action_server", gROSConfig.gripper_homing_action_server);
+    private_nh.getParam("/touch/master_touch/gripper_move_action_server", gROSConfig.gripper_move_action_server);
+    private_nh.getParam("/touch/master_touch/gripper_stop_action_server", gROSConfig.gripper_stop_action_server);
+    private_nh.getParam("/touch/master_touch/gripper_grasp_action_server", gROSConfig.gripper_grasp_action_server);
+    private_nh.getParam("/touch/master_touch/gripper_command_action_server", gROSConfig.gripper_command_action_server);
     
-    nh.getParam("/touch/master_touch/touch_open_goal/width", gROSConfig.touch_open_goal.width);
-    nh.getParam("/touch/master_touch/touch_open_goal/speed", gROSConfig.touch_open_goal.speed);
-    nh.getParam("/touch/master_touch/touch_close_goal/width", gROSConfig.touch_close_goal.width);
-    nh.getParam("/touch/master_touch/touch_close_goal/speed", gROSConfig.touch_close_goal.speed);
-    nh.getParam("/touch/master_touch/touch_grasp_goal/width", gROSConfig.touch_grasp_goal.width);
-    nh.getParam("/touch/master_touch/touch_grasp_goal/epsilon/inner", gROSConfig.touch_grasp_goal.epsilon.inner);
-    nh.getParam("/touch/master_touch/touch_grasp_goal/epsilon/outer", gROSConfig.touch_grasp_goal.epsilon.outer);
-    nh.getParam("/touch/master_touch/touch_grasp_goal/speed", gROSConfig.touch_grasp_goal.speed);
-    nh.getParam("/touch/master_touch/touch_grasp_goal/force", gROSConfig.touch_grasp_goal.force);
+    private_nh.getParam("/touch/master_touch/touch_open_goal/width", gROSConfig.touch_open_goal.width);
+    private_nh.getParam("/touch/master_touch/touch_open_goal/speed", gROSConfig.touch_open_goal.speed);
+    private_nh.getParam("/touch/master_touch/touch_close_goal/width", gROSConfig.touch_close_goal.width);
+    private_nh.getParam("/touch/master_touch/touch_close_goal/speed", gROSConfig.touch_close_goal.speed);
+    private_nh.getParam("/touch/master_touch/touch_grasp_goal/width", gROSConfig.touch_grasp_goal.width);
+    private_nh.getParam("/touch/master_touch/touch_grasp_goal/epsilon/inner", gROSConfig.touch_grasp_goal.epsilon.inner);
+    private_nh.getParam("/touch/master_touch/touch_grasp_goal/epsilon/outer", gROSConfig.touch_grasp_goal.epsilon.outer);
+    private_nh.getParam("/touch/master_touch/touch_grasp_goal/speed", gROSConfig.touch_grasp_goal.speed);
+    private_nh.getParam("/touch/master_touch/touch_grasp_goal/force", gROSConfig.touch_grasp_goal.force);
     
     /* Set the subscriber of feedback force. */
     gROSConfig.sub_feedback_force = nh.subscribe<geometry_msgs::WrenchStamped>(gROSConfig.master_feedback_force_topic, 1, GetFeedbackForceCallback);

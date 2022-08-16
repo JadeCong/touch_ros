@@ -71,14 +71,18 @@ def master_slave_force_mapping_node():
     dynamic_reconfigure_parameter_server = Server(force_scale_paramConfig, dynamic_reconfigure_force_scale_param_callback)
     
     # define the publisher and msgs for master force feedback
-    pub_feedback_force = rospy.Publisher("/touch/master_touch/feedback_force", WrenchStamped, queue_size=1)
+    pub_feedback_force = rospy.Publisher("/touch/master_touch/feedback_force", WrenchStamped,
+                                         queue_size=1, 
+                                         tcp_nodelay=True, 
+                                         latch=False)
     feedback_force = WrenchStamped()
     
     # define the subscriber for getting feedback force from slave hand
     sub_feedback_force = rospy.Subscriber(slave_force_topic, WrenchStamped, 
                                           callback=force_mapping_callback, 
                                           callback_args=[pub_feedback_force, feedback_force, master_force_frame_id, feedback_force_index, feedback_force_scale], 
-                                          queue_size=1)
+                                          queue_size=1, 
+                                          tcp_nodelay=True)
     
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()

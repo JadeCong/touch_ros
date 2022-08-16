@@ -198,7 +198,7 @@ void ConfigureROS(int argc, char* argv[])
     nh.getParam("/touch/feedback_force_from_hand/feedback_force_topic", gROSConfig.feedback_force_topic);
     
     /* Set the subscriber of feedback force. */
-    gROSConfig.sub_feedback_force = nh.subscribe<geometry_msgs::WrenchStamped>(gROSConfig.feedback_force_topic, 1, GetFeedbackForceCallback);
+    gROSConfig.sub_feedback_force = nh.subscribe<geometry_msgs::WrenchStamped>(gROSConfig.feedback_force_topic, 1, GetFeedbackForceCallback, ros::TransportHints().reliable().tcpNoDelay());
     
     /* Set the publisher of device state and command. */
     gROSConfig.pub_joint_states = nh.advertise<sensor_msgs::JointState>("/touch/master_touch/joint_states", 1);

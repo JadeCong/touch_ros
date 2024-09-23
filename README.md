@@ -7,7 +7,8 @@
 
 ## 2. Package touch_msgs
 
-> 功能：针对Touch生成特定的类型的消息格式，为Touch及其他设备提供特定的消息类型。
+> 功能：针对Touch生成特定的类型的消息格式，为Touch及其他设备提供特定的消息类型。<br>
+> 启动：
 
 ## 3. Package touch_common
 
@@ -16,7 +17,11 @@
 
 ## 4. Package touch_teleoperation
 
-> 功能：作为遥操作的主操作手节点，完成以下三项功能：（1）采集Touch的位姿作为控制指令发送给从操作手；（2）接收从操作手末端的反馈力并将其映射到主操作手的对应的工作空间；（3）将映射后反馈力施加到主操作手输出给操作者感知。<br>
+> 功能：作为遥操作的主操作手节点，完成以下三项功能：
+>>（1）采集Touch的位姿作为控制指令发送给从操作手；<br>
+>>（2）接收从操作手末端的反馈力并将其映射到主操作手的对应的工作空间；<br>
+>>（3）将映射后反馈力施加到主操作手输出给操作者感知。
+>
 > 启动：
 >> (1)遥操作主操作手节点（单独功能）：roslaunch touch_teleoperation master_touch.launch <br>
 >> (2)感知Hand的反馈力（单独功能）：roslaunch touch_teleoperation feedback_force_from_hand.launch
